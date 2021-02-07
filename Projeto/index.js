@@ -1,9 +1,19 @@
-const express = require('express')
+const customExpress = require('./config/customExpress')
+const conexao = require('./infraestrutura/conexao')
+const Tabelas = require('./infraestrutura/tabelas')
 
-const app = express()
+conexao.connect(erro => {
+    if(erro) {
+        console.log(erro)
+    }
+    else{
+        console.log('conectado com sucesso')
 
-app.listen(3000, () => console.log('servidor rodando na porta 3000'))
+        Tabelas.init(conexao)
 
-app.get('/turma', (req, res) => res.send('CRUD de turmas'))
+        const app = customExpress()
 
-app.get('/aluno', (req, res) => res.send('CRUD de alunos'))
+        app.listen(3000, () => console.log('servidor rodando na porta 3000'))
+    }
+})
+
