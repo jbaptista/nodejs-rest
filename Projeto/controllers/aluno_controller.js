@@ -1,7 +1,15 @@
+const { criarAtendimentos } = require('../infraestrutura/tabelas')
 const Aluno = require('../models/aluno')
 
 module.exports = app => {
-    app.get('/aluno', (req, res) => res.send('CRUD de alunos'))
+    app.get('/aluno', (req, res) => {
+        Aluno.lista(res)
+    })
+
+    app.get('/aluno/:id', (req, res) => {
+        const id = parseInt(req.params['id'])
+        Aluno.buscaPorId(id, res)
+    })
 
     app.post('/aluno', (req, res) => {
         const aluno = req.body
