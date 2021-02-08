@@ -71,6 +71,39 @@ class Aluno {
             }
         })
     }
+
+    altera(id, valores, res) {
+        const sql = 'UPDATE Aluno SET ? WHERE id = ?'
+
+        
+        if(valores.dt_nasc){
+            const dt_nasc = moment(valores.dt_nasc, 'DD/MM/YYYY').format('YYYY-MM-DD')
+            valores = {...valores, dt_nasc}
+        }
+
+        conexao.query(sql, [valores, id], (erro, resultados) => {
+            if(erro) {
+                res.status(400).json(erro)
+            }
+            else{
+                res.status(200).json(resultados)
+            }
+        })
+    }
+
+    apaga(id, res) {
+        const sql = 'DELETE FROM Aluno WHERE id = ?'
+
+        conexao.query(sql, id, (erro, resultados) => {
+            if(erro) {
+                res.status(400).json(erro)
+            }
+            else{
+                res.status(200).json({id})
+            }
+        })
+        
+    }
 }
 
 module.exports = new Aluno

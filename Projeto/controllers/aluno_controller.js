@@ -16,4 +16,16 @@ module.exports = app => {
 
         Aluno.adiciona(aluno, res)
     })
+
+    app.patch('/aluno/:id', (req, res) => {
+        const id = parseInt(req.params.id)
+        const valores = req.body
+
+        Aluno.altera(id, valores, res)
+    })
+
+    app.delete('/aluno/:id', (req, res) => {
+        const id = parseInt(req.params.id)
+        Aluno.apaga(id, res)
+    })
 }
