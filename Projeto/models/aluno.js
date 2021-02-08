@@ -59,13 +59,14 @@ class Aluno {
                 res.status(400).json(erro)
             }
             else{
-                if(resultados.length > 0){
-                    const aluno = resultados[0]
-                    res.status(200).json(aluno)
+                if(resultados.length == 0){
+                    res.status(404).json('Não encontrado')
                 }
                 else{
-                    res.status(404)
+                    res.status(200).json(resultados[0])
                 }
+                
+                
                 
             }
         })
