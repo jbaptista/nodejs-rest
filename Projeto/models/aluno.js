@@ -1,6 +1,7 @@
 const moment = require('moment')
 const { listenerCount } = require('../infraestrutura/conexao')
 const conexao = require('../infraestrutura/conexao')
+const uploadDeArquivo = require('../arquivos/uploadDeArquivos')
 
 class Aluno {
     adiciona(aluno, res) {
@@ -26,14 +27,25 @@ class Aluno {
         else{
             const sql = 'INSERT INTO Aluno SET ?'
 
-            conexao.query(sql, alunoDAO, (erro, resultados) => {
+            uploadDeArquivo(alunoDAO.foto, alunoDAO.nome, (erro, caminhoDestino) => {
                 if(erro){
-                    res.status(400).json(erro)
+                    res.status(400).json({ erro })
+                }else{
+                    const novoAluno = {...alunoDAO, foto: caminhoDestino}
+                
+                    conexao.query(sql, novoAluno, (erro, resultados) => {
+                        if(erro){
+                            res.status(400).json(erro)
+                        }
+                        else{
+                            res.status(201).json(novoAluno)
+                        }
+                    })
                 }
-                else{
-                    res.status(201).json(aluno)
-                }
+
             })
+
+            
         }
 
     }
